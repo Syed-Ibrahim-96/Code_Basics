@@ -1,0 +1,12 @@
+# Environment variables and secrets
+.env
+
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Log files
+loafly.log

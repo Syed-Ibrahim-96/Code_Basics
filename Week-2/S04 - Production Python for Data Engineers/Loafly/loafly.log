@@ -1,0 +1,49 @@
+2026-11-21 12:52:06,809 - __main__ - INFO - Starting Loafly Pipeline
+2026-11-21 12:52:06,810 - loafly.extract - INFO - Starting CSV extraction from raw_orders.csv
+2026-11-21 12:52:06,811 - loafly.extract - INFO - CSV extraction completed successfully
+2026-11-21 12:52:06,811 - __main__ - INFO - Extracted 32 records
+2026-11-21 12:52:06,811 - loafly.transform - WARNING - Skipping item. Order ID: 5004 | Item: Chocolate Cake Slice | Invalid price: '' | Reason: could not convert string to float: ''
+2026-11-21 12:52:06,811 - loafly.transform - WARNING - Skipping item. Order ID: 5009 | Item: Blueberry Muffin | Invalid price: '' | Reason: could not convert string to float: ''
+2026-11-21 12:52:06,812 - loafly.transform - WARNING - Skipping item. Order ID: 5013 | Item: Cookie Box | Invalid price: '' | Reason: could not convert string to float: ''
+2026-11-21 12:52:06,812 - loafly.transform - INFO - Transformation completed. Total orders: 15
+2026-11-21 12:52:06,812 - __main__ - INFO - Transformed 15 orders
+2026-11-21 13:01:13,615 - __main__ - INFO - Starting Loafly Pipeline
+2026-11-21 13:01:13,615 - loafly.extract - INFO - Starting CSV extraction from raw_orders.csv
+2026-11-21 13:01:13,616 - loafly.extract - INFO - CSV extraction completed successfully
+2026-11-21 13:01:13,616 - __main__ - INFO - Extracted 32 records
+2026-11-21 13:01:13,616 - loafly.transform - WARNING - Skipping item. Order ID: 5004 | Item: Chocolate Cake Slice | Invalid price: '' | Reason: could not convert string to float: ''
+2026-11-21 13:01:13,616 - loafly.transform - WARNING - Skipping item. Order ID: 5009 | Item: Blueberry Muffin | Invalid price: '' | Reason: could not convert string to float: ''
+2026-11-21 13:01:13,616 - loafly.transform - WARNING - Skipping item. Order ID: 5013 | Item: Cookie Box | Invalid price: '' | Reason: could not convert string to float: ''
+2026-11-21 13:01:13,617 - loafly.transform - INFO - Transformation completed. Total orders: 15
+2026-11-21 13:01:13,617 - __main__ - INFO - Transformed 15 orders
+2026-11-21 13:01:13,617 - loafly.load - WARNING - Using demo API key
+2026-11-21 13:01:13,617 - loafly.load - INFO - Saved Order: 5001 | Customer: Arjun | Total: 297.00 INR | Status: SAVED
+2026-11-21 13:01:13,617 - loafly.load - WARNING - API save failed for Order ID: 5002 | Attempt: 1/3 | Reason: orders API unavailable for order 5002
+2026-11-21 13:01:13,617 - loafly.load - INFO - Retrying Order ID: 5002 after 1 second
+2026-11-21 13:01:14,618 - loafly.load - INFO - Saved Order: 5002 | Customer: Kabir | Total: 513.00 INR | Status: SAVED
+2026-11-21 13:01:14,619 - loafly.load - WARNING - API save failed for Order ID: 5003 | Attempt: 1/3 | Reason: orders API unavailable for order 5003
+2026-11-21 13:01:14,619 - loafly.load - INFO - Retrying Order ID: 5003 after 1 second
+2026-11-21 13:01:15,620 - loafly.load - INFO - Saved Order: 5003 | Customer: Aarav | Total: 666.00 INR | Status: SAVED
+2026-11-21 13:01:15,620 - loafly.load - WARNING - API save failed for Order ID: 5004 | Attempt: 1/3 | Reason: orders API unavailable for order 5004
+2026-11-21 13:01:15,620 - loafly.load - INFO - Retrying Order ID: 5004 after 1 second
+2026-11-21 13:01:16,621 - loafly.load - INFO - Saved Order: 5004 | Customer: Kabir | Total: 369.00 INR | Status: SAVED
+2026-11-21 13:01:16,622 - loafly.load - WARNING - API save failed for Order ID: 5005 | Attempt: 1/3 | Reason: orders API unavailable for order 5005
+2026-11-21 13:01:16,623 - loafly.load - INFO - Retrying Order ID: 5005 after 1 second
+2026-11-21 13:01:17,624 - loafly.load - INFO - Saved Order: 5005 | Customer: Reyansh | Total: 243.00 INR | Status: SAVED
+2026-11-21 13:01:17,624 - loafly.load - INFO - Saved Order: 5006 | Customer: Rohan | Total: 1116.00 INR | Status: SAVED
+2026-11-21 13:01:17,624 - loafly.load - INFO - Saved Order: 5007 | Customer: Dev | Total: 369.00 INR | Status: SAVED
+2026-11-21 13:01:17,625 - loafly.load - INFO - Saved Order: 5008 | Customer: Ishita | Total: 639.00 INR | Status: SAVED
+2026-11-21 13:01:17,625 - loafly.load - WARNING - API save failed for Order ID: 5009 | Attempt: 1/3 | Reason: orders API unavailable for order 5009
+2026-11-21 13:01:17,627 - loafly.load - INFO - Retrying Order ID: 5009 after 1 second
+2026-11-21 13:01:18,628 - loafly.load - INFO - Saved Order: 5009 | Customer: Saanvi | Total: 396.00 INR | Status: SAVED
+2026-11-21 13:01:18,629 - loafly.load - WARNING - API save failed for Order ID: 5010 | Attempt: 1/3 | Reason: orders API unavailable for order 5010
+2026-11-21 13:01:18,629 - loafly.load - INFO - Retrying Order ID: 5010 after 1 second
+2026-11-21 13:01:19,631 - loafly.load - INFO - Saved Order: 5010 | Customer: Kabir | Total: 1467.00 INR | Status: SAVED
+2026-11-21 13:01:19,632 - loafly.load - WARNING - API save failed for Order ID: 5011 | Attempt: 1/3 | Reason: orders API unavailable for order 5011
+2026-11-21 13:01:19,632 - loafly.load - INFO - Retrying Order ID: 5011 after 1 second
+2026-11-21 13:01:20,633 - loafly.load - INFO - Saved Order: 5011 | Customer: Rohan | Total: 189.00 INR | Status: SAVED
+2026-11-21 13:01:20,633 - loafly.load - INFO - Saved Order: 5012 | Customer: Reyansh | Total: 351.00 INR | Status: SAVED
+2026-11-21 13:01:20,633 - loafly.load - INFO - Saved Order: 5013 | Customer: Saanvi | Total: 135.00 INR | Status: SAVED
+2026-11-21 13:01:20,634 - loafly.load - INFO - Saved Order: 5014 | Customer: Aditya | Total: 603.00 INR | Status: SAVED
+2026-11-21 13:01:20,634 - loafly.load - INFO - Saved Order: 5015 | Customer: Naina | Total: 135.00 INR | Status: SAVED
+2026-11-21 13:01:20,634 - __main__ - INFO - Loafly Pipeline Completed
