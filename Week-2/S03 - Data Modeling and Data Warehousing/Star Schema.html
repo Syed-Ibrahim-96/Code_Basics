@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Airline Data Warehouse: Star Schema</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#f5f7fa;--surface:#fff;--ink:#14202e;--muted:#55657a;--line:#d6dde6;--accent:#0b6bcb;--accent-soft:#e4f0fc;--fact:#0b6bcb;--factink:#fff;--dimhead:#e6ecf4;--rowline:#e8edf3;--font:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0e1620;--surface:#15202d;--ink:#e8eef5;--muted:#98a8bc;--line:#3a4b62;--accent:#5fb0ff;--accent-soft:#14304d;--fact:#2a78c8;--dimhead:#22344b;--rowline:#22324a}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0e1620;--surface:#15202d;--ink:#e8eef5;--muted:#98a8bc;--line:#3a4b62;--accent:#5fb0ff;--accent-soft:#14304d;--fact:#2a78c8;--dimhead:#22344b;--rowline:#22324a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--font)}
+main{max-width:1240px;margin:0 auto;padding:40px 24px 64px}
+h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:0 0 12px;letter-spacing:-.02em;font-weight:700}
+h2{font-size:1.1rem;margin:0 0 6px;font-weight:600}
+.lede{max-width:68ch;color:var(--muted);margin:0 0 20px}
+.lede strong{color:var(--ink);font-weight:600}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;overflow-x:auto}
+#erd{display:block;width:100%;min-width:900px;height:auto}
+.notes{display:grid;gap:16px;margin-top:24px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.note{border-left:3px solid var(--accent);padding:4px 0 4px 16px}
+.note p{margin:0;color:var(--muted);font-size:.95rem}
+code{background:var(--accent-soft);color:var(--ink);padding:1px 6px;border-radius:4px;font-size:.88em}
+.keys{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 16px;padding:0;list-style:none;color:var(--muted);font-size:.9rem}
+.keys code{margin-right:6px}
+/* diagram */
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.fbox{stroke:var(--fact)}
+.hd{fill:var(--dimhead)}.hdf{fill:var(--fact)}
+.ttl{font:600 14px var(--font);fill:var(--ink)}.ttlf{fill:var(--factink)}
+.sep{stroke:var(--rowline);stroke-width:1}
+.nm{font:500 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:var(--ink)}
+.ty{font:400 11px var(--font);fill:var(--muted);text-anchor:end}
+.tg{font:700 10px var(--font);fill:var(--accent)}
+.rel{fill:none;stroke:var(--muted);stroke-width:1.5}
+.lbl{font:500 11px var(--font);fill:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Airline data warehouse</h1>
+  <p class="lede">A star schema in the <code>dw</code> schema on SQL Server. <strong>One row in <code>FactTicketSales</code> is one passenger booking</strong> for a specific flight, identified by <code>booking_id</code>.</p>
+  <ul class="keys" aria-label="Key legend">
+    <li><code>PK</code>primary key</li><li><code>FK</code>foreign key</li><li><code>UK</code>unique business key</li><li>Crow’s foot = many, double bar = one</li>
+  </ul>
+  <div class="panel"><svg id="erd" viewBox="0 0 1170 500" role="img" aria-label="Entity relationship diagram of the airline star schema"></svg></div>
+  <section class="notes" aria-label="Design notes">
+    <div class="note"><h2>Role-playing dimensions</h2><p><code>DimDate</code> connects to the fact table three times (booking, travel, flight) and <code>DimAirport</code> twice (origin, destination).</p></div>
+    <div class="note"><h2>One snowflaked link</h2><p><code>DimPassenger</code> points to <code>DimAirport</code> through <code>home_airport_key</code>, so the model is a star with a single outrigger.</p></div>
+    <div class="note"><h2>Measures</h2><p>Additive measures are <code>fare_amount</code>, <code>tax_amount</code> and <code>miles_earned</code>. <code>booking_id</code> is a degenerate dimension.</p></div>
+  </section>
+</main>
+<script>
+(function(){
+var HH=32,RH=24;
+var T={
+ pass:{x:20,y:84,w:270,t:"DimPassenger",c:[["PK","passenger_key","INT"],["UK","passenger_id","INT"],["","passenger_name","VARCHAR"],["FK","home_airport_key","INT"],["","frequent_flyer_tier","VARCHAR"],["","signup_date","DATE"]]},
+ air:{x:20,y:300,w:270,t:"DimAirport",c:[["PK","airport_key","INT"],["UK","airport_code","VARCHAR"],["","airport_name","VARCHAR"],["","city","VARCHAR"],["","country","VARCHAR"],["","region","VARCHAR"]]},
+ fact:{x:400,y:60,w:290,f:1,t:"FactTicketSales",c:[["PK","booking_id","INT"],["FK","passenger_key","INT"],["FK","flight_key","INT"],["FK","aircraft_key","INT"],["FK","booking_date_key","INT"],["FK","travel_date_key","INT"],["FK","flight_date_key","INT"],["FK","origin_airport_key","INT"],["FK","destination_airport_key","INT"],["","fare_class","VARCHAR"],["","booking_status","VARCHAR"],["","fare_amount","DECIMAL"],["","tax_amount","DECIMAL"],["","miles_earned","INT"]]},
+ flt:{x:880,y:14,w:270,t:"DimFlight",c:[["PK","flight_key","INT"],["UK","flight_id","INT"],["","flight_number","VARCHAR"]]},
+ acf:{x:880,y:132,w:270,t:"DimAircraft",c:[["PK","aircraft_key","INT"],["UK","aircraft_code","VARCHAR"],["","model","VARCHAR"],["","manufacturer","VARCHAR"],["","seat_capacity","INT"]]},
+ dt:{x:880,y:330,w:270,t:"DimDate",c:[["PK","date_key","INT"],["UK","date_value","DATE"]]}
+};
+function cy(k,i){var o=T[k];return o.y+HH+i*RH+RH/2;}
+var s='<defs>'+
+'<marker id="many" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="0" refY="0" orient="auto" overflow="visible"><path d="M11 0L0 -6M11 0L0 0M11 0L0 6M11 -6V6" fill="none" style="stroke:var(--muted)" stroke-width="1.5"/></marker>'+
+'<marker id="one" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="0" refY="0" orient="auto" overflow="visible"><path d="M-6 -6V6M-11 -6V6" fill="none" style="stroke:var(--muted)" stroke-width="1.5"/></marker></defs>';
+// relationships first so tables sit on top
+function rel(d){s+='<path class="rel" d="'+d+'" marker-start="url(#many)" marker-end="url(#one)"/>';}
+function lab(x,y,t,a){s+='<text class="lbl" x="'+x+'" y="'+y+'"'+(a?' text-anchor="'+a+'"':'')+'>'+t+'</text>';}
+var f=T.fact,fl=f.x,fr=f.x+f.w;
+rel('M'+fl+','+cy('fact',1)+'H'+(T.pass.x+T.pass.w)+'V'+cy('fact',1)); // passenger straight
+rel('M'+fl+','+cy('fact',7)+'H310V'+cy('air',0)+'H290');
+rel('M'+fl+','+cy('fact',8)+'H340V'+cy('air',0)+'H290');
+rel('M'+fr+','+cy('fact',2)+'H830V'+cy('flt',0)+'H880');
+rel('M'+fr+','+cy('fact',3)+'H880');
+rel('M'+fr+','+cy('fact',4)+'H820V'+cy('dt',0)+'H880');
+rel('M'+fr+','+cy('fact',5)+'H795V'+cy('dt',0)+'H880');
+rel('M'+fr+','+cy('fact',6)+'H770V'+cy('dt',0)+'H880');
+rel('M155,260V300');
+lab(396,cy('fact',1)-5,'passenger','end');
+lab(396,cy('fact',7)-5,'origin','end');
+lab(396,cy('fact',8)-5,'destination','end');
+lab(698,cy('fact',2)-5,'flight');
+lab(698,cy('fact',3)-5,'aircraft');
+lab(698,cy('fact',4)-5,'booking date');
+lab(698,cy('fact',5)-5,'travel date');
+lab(698,cy('fact',6)-5,'flight date');
+lab(165,284,'home airport');
+Object.keys(T).forEach(function(k){
+ var o=T[k],h=HH+o.c.length*RH;
+ s+='<g><rect class="box'+(o.f?' fbox':'')+'" x="'+o.x+'" y="'+o.y+'" width="'+o.w+'" height="'+h+'" rx="8"/>';
+ s+='<path class="'+(o.f?'hdf':'hd')+'" d="M'+o.x+','+(o.y+HH)+'V'+(o.y+8)+'a8,8 0 0 1 8,-8H'+(o.x+o.w-8)+'a8,8 0 0 1 8,8V'+(o.y+HH)+'Z"/>';
+ s+='<text class="ttl'+(o.f?' ttlf':'')+'" x="'+(o.x+14)+'" y="'+(o.y+21)+'">'+o.t+'</text>';
+ o.c.forEach(function(c,i){
+  var y=o.y+HH+i*RH;
+  if(i>0)s+='<line class="sep" x1="'+(o.x+1)+'" x2="'+(o.x+o.w-1)+'" y1="'+y+'" y2="'+y+'"/>';
+  s+='<text class="tg" x="'+(o.x+14)+'" y="'+(y+16)+'">'+c[0]+'</text>';
+  s+='<text class="nm" x="'+(o.x+44)+'" y="'+(y+16)+'">'+c[1]+'</text>';
+  s+='<text class="ty" x="'+(o.x+o.w-12)+'" y="'+(y+16)+'">'+c[2]+'</text>';
+ });
+ s+='</g>';
+});
+document.getElementById('erd').innerHTML=s;
+})();
+</script>
+</body>
+</html>
